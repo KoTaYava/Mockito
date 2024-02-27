@@ -13,6 +13,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 class EmployeeServiceImplTest {
     @Mock
@@ -29,20 +32,30 @@ class EmployeeServiceImplTest {
 
     @Test
     void addEmployee() {
+        int beforeCount = employeeService.findAllEmployees().size();
         String firstName = "Vladimir";
         String lastName = "Losev";
         int salary = 8000;
         int department = 1;
-        Mockito.when(employeeMap.containsKey(Mockito.anyString())).thenReturn(false);
-        Mockito.when(employeeMap.put(Mockito.anyString(), Mockito.any(Employee.class))).thenReturn(null);
+        when(employeeMap.containsKey(firstName + " " + lastName)).thenReturn(false);
+        when(employeeMap.put(anyString(), any(Employee.class))).thenReturn(null);
+
 
         Employee result = employeeService.addEmployee(firstName, lastName, salary, department);
 
-        Assertions.assertEquals(firstName, result.getFirstName());
-        Assertions.assertEquals(lastName, result.getLastName());
-        Assertions.assertEquals(salary, result.getSalary());
-        Assertions.assertEquals(department, result.getDepartment());
+
+        assertEquals(firstName, result.getFirstName());
+        assertEquals(lastName, result.getLastName());
+        assertEquals(salary, result.getSalary());
+        assertEquals(department, result.getDepartment());
+
+
+        when(employeeMap.containsKey(firstName + " " + lastName)).thenReturn(true);
+        Employee existingEmployeeResult = employeeService.addEmployee(firstName, lastName, salary, department);
+        assertNull(existingEmployeeResult); // Ensure that the existing employee was not added again
     }
+
+
 
 
 
