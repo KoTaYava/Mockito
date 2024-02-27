@@ -36,6 +36,7 @@ class DeportmentServiceImpTest {
 
         Assertions.assertTrue(result.isPresent());
         Assertions.assertEquals("Anna", result.get().getFirstName());
+
     }
 
     @Test
